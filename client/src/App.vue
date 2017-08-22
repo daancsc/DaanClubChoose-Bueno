@@ -1,0 +1,49 @@
+<template>
+  <v-app light>
+    <v-toolbar class="orange" dark>
+      <v-icon class="white--text">cloud</v-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items v-if="login">
+        <v-btn flat>你好 陳典佑! 登出</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <main>
+      <v-container fluid>
+        <transition name="slide" mode="out-in">
+          <router-view></router-view>
+        </transition>
+      </v-container>
+    </main>
+    <v-footer>
+      <div style="width:100%;text-align:right;">&copy; 2017</div>
+    </v-footer>
+  </v-app>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        title: '大安高工綜合活動選課系統',
+        login: true
+      }
+    }
+  }
+</script>
+
+<style lang="stylus">
+  @import './stylus/main'
+
+  h2 
+    font-size: 1.5rem
+    text-align: center
+    display: block
+    width: 100%
+    line-height: 1.5rem
+  h4
+    font-size: 1.2rem
+    display: block
+    width: 100%
+    line-height: 1.2rem
+</style>
