@@ -22,7 +22,16 @@ router.get('/status', (req, res, next) => {
 })
 
 router.post('/choose', (req, res, next) => {
-    User.setChoose(req.get("Authorization"), req.body.body).then((result) => {
+    User.setChoose(req.get("Authorization"), req.body).then((result) => {
+        res.status(200).json(result)
+    }).catch((error) => {
+        console.log(error)
+        res.status(500).json({status:false})
+    })
+})
+
+router.get('/clubs', (req, res, next) => {
+    User.getClubs(req.get("Authorization")).then((result) => {
         res.status(200).json(result)
     }).catch((error) => {
         console.log(error)

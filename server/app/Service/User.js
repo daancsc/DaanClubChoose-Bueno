@@ -61,7 +61,6 @@ let getStatus = (token) => {
 }
 
 let setChoose = (token, chooses) => {
-  // console.log(chooses.length)
   return new Promise((resolve, reject) => {
     redis.get(token).then((value) => {
       return Model.Student.findOne({ where: { account: value} })
@@ -76,8 +75,25 @@ let setChoose = (token, chooses) => {
   })
 }
 
+let getClubs = (token) => {
+  return new Promise((resolve, reject) => {
+    redis.get(token).then((value) => {
+      return Model.Student.findOne({ where: { account: value} })
+    }).then(student => {
+      Model.Clubs.findAll().then((clubs) => {
+        var result = []
+        for (let i = 0; i < clubs.length; i++) {
+          result.push({id: clubs.get('id'), name: clubs.get('name')})
+        }
+        resolve(result)
+      })
+    })
+  })
+}
+
 module.exports = {
   login: login,
   getStatus: getStatus,
-  setChoose: setChoose
+  setChoose: setChoose,
+  getClubs: getClubs
 }
