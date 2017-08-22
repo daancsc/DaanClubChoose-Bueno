@@ -83,7 +83,7 @@ let getClubs = (token) => {
       Model.Clubs.findAll().then((clubs) => {
         var result = []
         for (let i = 0; i < clubs.length; i++) {
-          if (student.get('class').search('綜高') && clubs[i].get('id') === 1) {
+          if (student.get('class').search('綜高') !== -1 && clubs[i].get('id') === 1) {
             continue
           }
           result.push({id: clubs[i].get('id'), name: clubs[i].get('name')})
