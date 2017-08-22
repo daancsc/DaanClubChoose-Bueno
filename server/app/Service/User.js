@@ -61,14 +61,14 @@ let getStatus = (token) => {
 }
 
 let setChoose = (token, chooses) => {
-  console.log(chooses.length)
+  // console.log(chooses.length)
   return new Promise((resolve, reject) => {
     redis.get(token).then((value) => {
       return Model.Student.findOne({ where: { account: value} })
     }).then(student => {
       Model.Choose.destroy({where:{stu_id: student.get('id')}}).then(() => {
         for (let i = 0; i < chooses.length; i++) {
-          Model.Choose.create({ step: (i+1), club_id: chooses[i].id, more: (chooses[i].more.length != 0)?'':chooses[i].more.join(',') }).then()
+          Model.Choose.create({ step: (i+1), club_id: chooses[i].id, more: (chooses[i].more === undefined)?'':chooses[i].more.join(',') }).then()
         }
         resolve({status: true})
       })
