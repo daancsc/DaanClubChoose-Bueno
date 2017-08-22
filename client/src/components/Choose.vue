@@ -63,88 +63,40 @@
         </v-layout>
         <v-divider class="mb-4 mt-4"></v-divider>
         <h4>4.送出志願</h4>
-        <v-btn primary block class="blue" :disabled="check" @click="submit">送出</v-btn>
+        <v-btn primary block class="blue" :disabled="check" @click="submit" :loading="network">送出</v-btn>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script>
+import api from '../model/api'
 export default {
   data () {
     return {
       add: null,
-      list: [
-        {
-          id: 1,
-          name: '木棉手札精進班'
-        },
-        {
-          id: 2,
-          name: '法語班'
-        },
-        {
-          id: 3,
-          name: '德語班'
-        },
-        {
-          id: 4,
-          name: '日文班'
-        },
-        {
-          id: 5,
-          name: '棒球班'
-        },
-        {
-          id: 6,
-          name: '籃球班'
-        },
-        {
-          id: 7,
-          name: '德語班'
-        },
-        {
-          id: 8,
-          name: '日文班'
-        },
-        {
-          id: 9,
-          name: '棒球班'
-        },
-        {
-          id: 10,
-          name: '籃球班'
-        },
-        {
-          id: 11,
-          name: '德語班'
-        },
-        {
-          id: 12,
-          name: '日文班'
-        },
-        {
-          id: 13,
-          name: '棒球班'
-        },
-        {
-          id: 14,
-          name: '籃球班'
-        }
-      ],
+      list: [],
       choose: [],
       selectId: 0,
       opti1: 0,
       optiBody1: [],
       opti2: 0,
-      optiBody2: []
+      optiBody2: [],
+      network: false
     }
   },
   computed: {
     noChoose: function () {
       var self = this
       return this.list.filter((element) => {
-        return self.choose.indexOf(element) === -1
+        var result = true
+        for (var i = 0; i < self.choose.length; i++) {
+          if (self.choose[i].id === element.id) {
+            result = false
+            break
+          }
+        }
+        return result
       })
     },
     check: function () {
@@ -214,8 +166,54 @@ export default {
       }
     },
     submit () {
-      this.$router.replace('result')
+      var self = this
+      for (var i = 0; i < self.choose.length; i++) {
+        delete self.choose[i].more
+      }
+      for (i = 0; i < self.choose.length; i++) {
+        if (self.opti1 === self.choose[i].id) {
+          self.choose[i].more = self.optiBody1
+        }
+        if (self.opti2 === self.choose[i].id) {
+          self.choose[i].more = self.optiBody2
+        }
+      }
+      self.network = true
+      api.setChoose(window.localStorage.getItem('token'), self.choose).then(function (res) {
+        self.network = false
+        alert('儲存成功')
+        self.$router.replace('result')
+      })
     }
+  },
+  beforeMount () {
+    var self = this
+    self.network = true
+    api.getClubs(window.localStorage.getItem('token')).then(function (res) {
+      self.list = res.data
+      self.network = false
+    }).catch(function (error) {
+      console.log(error)
+      alert('發生錯誤')
+      self.$router.replace('/')
+    })
+    api.getStatus(window.localStorage.getItem('token')).then(function (res) {
+      self.$emit('login', res.data.name)
+      self.choose = res.data.choose
+      var times = 1
+      for (var i = 0; i < self.choose.length; i++) {
+        if (self.choose[i].more !== undefined) {
+          self['opti' + times] = self.choose[i].id
+          self['optiBody' + times] = self.choose[i].more
+          times++
+        }
+      }
+      self.network = false
+    }).catch(function (error) {
+      console.log(error)
+      alert('發生錯誤')
+      self.$router.replace('/')
+    })
   }
 }
 </script>

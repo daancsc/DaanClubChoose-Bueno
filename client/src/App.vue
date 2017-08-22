@@ -4,14 +4,14 @@
       <v-icon class="white--text">cloud</v-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items v-if="login">
-        <v-btn flat>你好 陳典佑! 登出</v-btn>
+      <v-toolbar-items v-if="name !== ''">
+        <v-btn flat @click.native="logout">你好 {{ name }}! 登出</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main>
       <v-container fluid>
         <transition name="slide" mode="out-in">
-          <router-view></router-view>
+          <router-view @login="display"></router-view>
         </transition>
       </v-container>
     </main>
@@ -26,7 +26,17 @@
     data () {
       return {
         title: '大安高工綜合活動選課系統',
-        login: true
+        name: ''
+      }
+    },
+    methods: {
+      display (name) {
+        this.name = name
+      },
+      logout () {
+        window.localStorage.removeItem('token')
+        this.$router.replace('/')
+        this.name = ''
       }
     }
   }

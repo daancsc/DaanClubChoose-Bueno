@@ -16,12 +16,26 @@ export default new Router({
     {
       path: '/choose',
       name: 'choose',
-      component: Choose
+      component: Choose,
+      beforeEnter (to, from, next) {
+        if (window.localStorage.getItem('token') !== null) {
+          next()
+        } else {
+          next('/')
+        }
+      }
     },
     {
       path: '/result',
       name: 'result',
-      component: Result
+      component: Result,
+      beforeEnter (to, from, next) {
+        if (window.localStorage.getItem('token') !== null) {
+          next()
+        } else {
+          next('/')
+        }
+      }
     }
   ]
 })
