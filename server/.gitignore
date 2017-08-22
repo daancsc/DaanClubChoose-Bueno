@@ -1,3 +1,5 @@
 node_modules/
 
 config/database.json
+
+.DS_Store
