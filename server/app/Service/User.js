@@ -61,7 +61,7 @@ let getStatus = (token) => {
 }
 
 let setChoose = (token, chooses) => {
-  console.log(chooses)
+  console.log(chooses[0])
   return new Promise((resolve, reject) => {
     redis.get(token).then((value) => {
       return Model.Student.findOne({ where: { account: value} })
