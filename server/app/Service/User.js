@@ -34,9 +34,9 @@ let getStatus = (token) => {
     }).then(student => {
       result.name = student.get('name')
       result.class = student.get('class')
-      return Model.Choose.findAll({ where: {stu_id: student.id} })
+      return Model.Choose.findAll({ where: {stu_id: student.id}, order:[['step','ASC']] })
     }).then(chooses => {
-      Model.Clubs.findAll({ order:[['step','ASC']] }).then((clubs) => {
+      Model.Clubs.findAll().then((clubs) => {
         result.choose = []
         for (let i = 0;i < chooses.length; i++) {
           for (let j = 0;j < clubs.length; j++) {
