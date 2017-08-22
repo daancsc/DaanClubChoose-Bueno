@@ -67,7 +67,7 @@ let setChoose = (token, chooses) => {
     }).then(student => {
       Model.Choose.destroy({where:{stu_id: student.get('id')}}).then(() => {
         for (let i = 0; i < chooses.length; i++) {
-          await Model.Choose.create({ step: (i+1), club_id: chooses[i].id, more: (chooses[i].more.length != 0)?'':chooses[i].more.join(',') })
+          var temp = await Model.Choose.create({ step: (i+1), club_id: chooses[i].id, more: (chooses[i].more.length != 0)?'':chooses[i].more.join(',') })
         }
         resolve({status: true})
       })
