@@ -86,7 +86,8 @@ export default {
       optiBody1: [],
       opti2: 0,
       optiBody2: [],
-      network: false
+      network: false,
+      sort: true
     }
   },
   computed: {
@@ -128,6 +129,7 @@ export default {
           break
         }
       }
+      if (this.sort) result = true
       return result
     },
     optitem: function () {
@@ -226,6 +228,7 @@ export default {
     api.getStatus(window.localStorage.getItem('token')).then(function (res) {
       self.$emit('login', res.data.name)
       self.choose = res.data.choose
+      self.sort = (res.data.class.search('綜高') === -1)
       var times = 1
       for (var i = 0; i < self.choose.length; i++) {
         if (self.choose[i].more !== undefined) {
