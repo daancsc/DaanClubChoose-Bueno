@@ -129,7 +129,7 @@ export default {
           break
         }
       }
-      if (this.sort) result = true
+      if (!this.sort) result = true
       return result
     },
     optitem: function () {
