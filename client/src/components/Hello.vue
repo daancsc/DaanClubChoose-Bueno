@@ -18,7 +18,7 @@
             <v-divider class="mb-2"></v-divider>
             <v-text-field id="account" name="account" label="請輸入學號" v-model="account" :disabled="disabled" :autofocus="!disabled"></v-text-field>
             <v-text-field id="password" type="password" name="password" label="請輸入身份證後四碼" v-model="password"  :disabled="disabled"></v-text-field>
-            <v-btn block primary :disabled="disabled" @click="login" :loading="dialog">登入</v-btn>
+            <v-btn block primary :disabled="disabled" @click.stop="login" :loading="dialog">登入</v-btn>
             <v-divider class="mt-3"></v-divider>
             <a href="static/clubs.pdf">&gt;&gt;課程總覽&lt;&lt;</a>
             <a href="static/prove.docx">&gt;&gt;佐證資料&lt;&lt;</a>
@@ -32,7 +32,7 @@
         <v-card-text class="text-xs-center">我已看完<a href="static/help.pdf">選課須知</a>與<a href="static/clubs.pdf">課程總覽</a></v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="blue" block primary @click.native="closeDig" :loading="!finishNet" :disabled="!finishNet">完成</v-btn>
+          <v-btn class="blue" block primary @click.native.stop="closeDig" :loading="!finishNet" :disabled="!finishNet">完成</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -57,7 +57,7 @@ export default {
   methods: {
     login () {
       var self = this
-      this.dialog = true
+      self.dialog = true
       self.finishNet = false
       api.login(this.account, this.password).then(function (res) {
         if (res.data.status) {
@@ -71,11 +71,13 @@ export default {
           }
         }).catch(function (error) {
           self.dialog = false
+          self.finishNet = true
           console.log(error)
           alert('發生錯誤')
           self.$router.replace('/')
         })
       }).catch(function (error) {
+        self.finishNet = true
         console.log(error)
         self.dialog = false
         self.error = '帳號密碼輸入錯誤'
