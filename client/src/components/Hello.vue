@@ -16,8 +16,8 @@
           <v-alert error value="true" class="ma-2" v-if="error !== ''">{{ error }}</v-alert>
           <v-card-text class="pt-0">
             <v-divider class="mb-2"></v-divider>
-            <v-text-field id="account" name="account" label="請輸入學校系統帳號" v-model="account" :disabled="disabled" :autofocus="!disabled"></v-text-field>
-            <v-text-field id="password" type="password" name="password" label="請輸入學校系統密碼" v-model="password"  :disabled="disabled"></v-text-field>
+            <v-text-field id="account" name="account" label="請輸入學號" v-model="account" :disabled="disabled" :autofocus="!disabled"></v-text-field>
+            <v-text-field id="password" type="password" name="password" label="請輸入身份證後四碼" v-model="password"  :disabled="disabled"></v-text-field>
             <v-btn block primary :disabled="disabled" @click="login" :loading="dialog">登入</v-btn>
             <v-divider class="mt-3"></v-divider>
             <a href="static/clubs.pdf">&gt;&gt;課程總覽&lt;&lt;</a>

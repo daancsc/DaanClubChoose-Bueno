@@ -16,7 +16,7 @@
       </v-container>
     </main>
     <v-footer>
-      <div style="width:100%;text-align:right;">&copy; 2017</div>
+      <div style="width:100%;text-align:right;">&copy; 2017 <a href="https://dacsc.club" target="_blank">大安高工電腦研究社</a> 16th 網管 IU</div>
     </v-footer>
   </v-app>
 </template>
