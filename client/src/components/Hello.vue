@@ -58,13 +58,14 @@ export default {
     login () {
       var self = this
       this.dialog = true
+      self.finishNet = true
       api.login(this.account, this.password).then(function (res) {
-        if (res.data.status) {
-          self.finishNet = true
+        if (res.data.status) { 
           window.localStorage.setItem('token', res.data.token)
         }
         api.getStatus(window.localStorage.getItem('token')).then(function (res) {
           self.$emit('login', res.data.name)
+          self.finishNet = false
           if (res.data.choose.length > 0) {
             self.$router.replace('result')
           }
