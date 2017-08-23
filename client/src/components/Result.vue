@@ -11,7 +11,7 @@
                 <li v-for="(item,index) in choose" :key="item.id">{{ "第 "+(index+1)+" 志願："+item.name }}</li>
               </ul>
             </v-layout>
-            <v-btn primary block class="red" @click.native="modify">修改</v-btn>
+            <v-btn primary block class="red" @click.native.stop="modify">修改</v-btn>
           </v-card-text>
         </v-card>
       </v-flex>

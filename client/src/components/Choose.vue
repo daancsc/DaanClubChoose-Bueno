@@ -67,7 +67,7 @@
         </v-layout>
         <v-divider class="mb-4 mt-4"></v-divider>
         <h4>4.送出志願</h4>
-        <v-btn primary block class="blue" :disabled="check" @click="submit" :loading="network">送出</v-btn>
+        <v-btn primary block class="blue" :disabled="check" @click.stop="submit" :loading="network">送出</v-btn>
       </v-card-text>
     </v-card>
   </div>
