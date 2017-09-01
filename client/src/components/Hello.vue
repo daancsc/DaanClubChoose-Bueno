@@ -46,7 +46,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      disabled: false,
+      disabled: true,
       dialog: false,
       finishNet: false,
       account: '',
