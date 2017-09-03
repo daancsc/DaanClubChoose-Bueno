@@ -48,23 +48,25 @@ async function run() {
         }
         clubList.push(club)
     }
-    console.log('com:' + com.length)
-    console.log('other:' + other.length)
+    // console.log('com:' + com.length)
+    // console.log('other:' + other.length)
 
     console.log('struct finish!')
     
-    // com = _.shuffle(com)
-    // other = _.shuffle(other)
+    com = _.shuffle(com)
+    other = _.shuffle(other)
 
     console.log('random')
     
     for (let k = 0; k < 15; k++) {
         for (let i = 0; i < com.length; i++) {
             for (let j = 0; j < clubList.length; j++) {
-                if (clubList[j].id == parseInt(com[i].chooses[k])) {
-                    if (clubList[j].students.length < 3) {
-                        com[i].result = clubList[j].name
-                        clubList[j].students.push(com[i])
+                if (com[i].result === null) {
+                    if (clubList[j].id == parseInt(com[i].chooses[k])) {
+                        if (clubList[j].students.length < 3) {
+                            com[i].result = clubList[j].name
+                            clubList[j].students.push(com[i])
+                        }
                     }
                 }
             }
@@ -74,11 +76,13 @@ async function run() {
     for (let k = 0; k < 15; k++) {
         for (let i = 0; i < other.length; i++) {
             for (let j = 0; j < clubList.length; j++) {
-                if (clubList[j].id == parseInt(other[i].chooses[k])) {
-                    console.log((clubList[j].max - clubList[j].students.length))
-                    if ((clubList[j].max - clubList[j].students.length) > 0) {
-                        other[i].result = clubList[j].name
-                        clubList[j].students.push(other[i])
+                if (other[i].result === null) {
+                    if (clubList[j].id == parseInt(other[i].chooses[k])) {
+                        console.log((clubList[j].max - clubList[j].students.length))
+                        if ((clubList[j].max - clubList[j].students.length) > 0) {
+                            other[i].result = clubList[j].name
+                            clubList[j].students.push(other[i])
+                        }
                     }
                 }
             }
