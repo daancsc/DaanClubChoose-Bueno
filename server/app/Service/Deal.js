@@ -96,6 +96,18 @@ async function run() {
     }
     
     fs.writeFileSync('result.csv', text)
+
+    text = ''
+    for (let i = 0; i < students.length; i++) {
+        text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' 
+        if (students[i].chooses.length > 0)
+            for (let j = 0; j < students[i].chooses.length; j++) 
+                text += students[i].chooses[j] + ','
+        text += '\n'
+    }
+
+    fs.writeFileSync('choose.csv', text)
+
     console.log('write result finish!')
     return
 }

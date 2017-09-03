@@ -3,7 +3,8 @@ var config = require('../../config/database.json')
 
 const sequelize = new Sequelize(config.database, config.username, config.password , {
     host: config.host,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    logging: false
 })
 
 const Student = sequelize.define('student', {
