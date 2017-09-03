@@ -35,5 +35,6 @@ sequelize.sync()
 module.exports = {
     Student: Student,
     Clubs: Clubs,
-    Choose: Choose
+    Choose: Choose,
+    sequelize: sequelize
 }
