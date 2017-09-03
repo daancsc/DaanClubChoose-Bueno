@@ -12,6 +12,8 @@ async function run() {
     let other = []
     let com = []
     // let finish = []
+
+    console.log(chooses)
     
     for (let i = 0; i < chooses.length; i++) {
         let stu = await Model.Student.findById(chooses[i].get('stu_id'))
