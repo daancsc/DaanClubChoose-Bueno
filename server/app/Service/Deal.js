@@ -101,8 +101,11 @@ async function run() {
     for (let i = 0; i < students.length; i++) {
         text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' 
         if (students[i].chooses.length > 0)
-            for (let j = 0; j < students[i].chooses.length; j++) 
-                text += students[i].chooses[j] + ','
+            for (let j = 0; j < students[i].chooses.length; j++) {
+                let temp = await Model.Clubs.findById(students[i].chooses[j])
+                text += temp.get('name') + ','
+            }
+                
         text += '\n'
     }
 
