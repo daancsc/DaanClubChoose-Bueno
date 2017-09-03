@@ -48,6 +48,8 @@ async function run() {
         }
         clubList.push(club)
     }
+    console.log('com:' + com.length)
+    console.log('other:' + other.length)
 
     console.log('struct finish!')
     
@@ -59,7 +61,7 @@ async function run() {
     for (let k = 0; k < 15; k++) {
         for (let i = 0; i < com.length; i++) {
             for (let j = 0; j < clubList.length; j++) {
-                if (clubList[j].id === parseInt(com[i].chooses[k])) {
+                if (clubList[j].id == parseInt(com[i].chooses[k])) {
                     if (clubList[j].students.length < 3) {
                         com[i].result = clubList[j].name
                         clubList[j].students.push(com[i])
@@ -72,7 +74,7 @@ async function run() {
     for (let k = 0; k < 15; k++) {
         for (let i = 0; i < other.length; i++) {
             for (let j = 0; j < clubList.length; j++) {
-                if (clubList[j].id === parseInt(other[i].chooses[k])) {
+                if (clubList[j].id == parseInt(other[i].chooses[k])) {
                     if ((clubList[j].max - clubList[j].students.length) > 0) {
                         other[i].result = clubList[j].name
                         clubList[j].students.push(other[i])
