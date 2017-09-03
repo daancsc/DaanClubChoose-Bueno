@@ -21,8 +21,12 @@ async function run() {
             name: stus[i].get('name'),
             class: stus[i].get('class'),
             account: stus[i].get('account'),
-            chooses: chooses[i]['chosens'].split(','),
             result: null
+        }
+        if (chooses.length > 0) {
+            temp.chooses = chooses[i]['chosens'].split(',')
+        } else {
+            temp.chooses = []
         }
         if (stus[i].get('class').search('綜高') !== -1) {
             com.push(temp)
