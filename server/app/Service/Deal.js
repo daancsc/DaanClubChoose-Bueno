@@ -92,6 +92,7 @@ async function run() {
     
     fs.writeFileSync('result.csv', text)
     console.log('write result finish!')
+    return
 }
 
 run()
