@@ -53,8 +53,8 @@ async function run() {
 
     console.log('struct finish!')
     
-    com = _.shuffle(com)
-    other = _.shuffle(other)
+    // com = _.shuffle(com)
+    // other = _.shuffle(other)
 
     console.log('random')
     
