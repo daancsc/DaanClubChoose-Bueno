@@ -19,9 +19,9 @@ async function run() {
         if (stus[i].get('chosen') === 1) continue
         let chooses = await Model.sequelize.query('SELECT stu_id,GROUP_CONCAT(DISTINCT club_id ORDER BY step) as chosens FROM `chooses` GROUP BY stu_id HAVING stu_id = ' + stus[i].get('id'), { type: Model.sequelize.QueryTypes.SELECT})
         let temp = {
-            name: stus[i].get('name'),
-            class: stus[i].get('class'),
-            account: stus[i].get('account'),
+            name: stus[i].get('name').trim(),
+            class: stus[i].get('class').trim(),
+            account: stus[i].get('account').trim(),
             result: null
         }
         // console.log(chooses)
