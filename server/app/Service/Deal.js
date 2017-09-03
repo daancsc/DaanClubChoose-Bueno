@@ -114,6 +114,19 @@ async function run() {
 
     fs.writeFileSync('choose.csv', text)
 
+    text = ''
+    for (let i = 0; i < clubList.length; i++) {
+        text += clubList[i].name + '\n'
+        for (let j = 0; j < clubList[i].students.length; i++) {
+            text += clubList[i].students[j].account + ',' + clubList[i].students[j].class + ',' + clubList[i].students[j].name + ',' 
+            if (clubList[i].students[j].result != null)
+                text += clubList[i].students[j].result
+            text += ',填寫' + clubList[i].students[j].chooses.length + '志願'
+            text += '\n'
+        }   
+        text += '\n'
+    }
+
     console.log('write result finish!')
     return
 }
