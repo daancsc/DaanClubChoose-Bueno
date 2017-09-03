@@ -88,7 +88,11 @@ async function run() {
     let text = ''
     
     for (let i = 0; i < students.length; i++) {
-        text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' + students[i].result + '\n'
+        text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' 
+        if (students[i].result != null)
+            text += students[i].result + ','
+        text += '填寫' + students[i].chooses.length + '志願'
+        text += '\n'
     }
     
     fs.writeFileSync('result.csv', text)
