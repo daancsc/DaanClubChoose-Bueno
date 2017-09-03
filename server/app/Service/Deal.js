@@ -117,7 +117,7 @@ async function run() {
     text = ''
     for (let i = 0; i < clubList.length; i++) {
         text += clubList[i].name + '\n'
-        for (let j = 0; j < clubList[i].students.length; i++) {
+        for (let j = 0; j < clubList[i].students.length; j++) {
             text += clubList[i].students[j].account + ',' + clubList[i].students[j].class + ',' + clubList[i].students[j].name + ',' 
             if (clubList[i].students[j].result != null)
                 text += clubList[i].students[j].result
