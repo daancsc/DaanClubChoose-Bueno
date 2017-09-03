@@ -6,7 +6,7 @@ let fs = require('fs')
 async function run() {
     let clubs = await Model.Clubs.all()
     
-    let chooses = await Model.sequelize.query('SELECT stu_id,GROUP_CONCAT(DISTINCT club_id ORDER BY step) as chosens FROM `chooses` GROUP BY stu_id', { type: Model.sequelize.QueryTypes.SELECT})
+    let stus = await Model.Student.all()
     
     let students = []
     let other = []
@@ -15,16 +15,16 @@ async function run() {
 
     // console.log(chooses)
     
-    for (let i = 0; i < chooses.length; i++) {
-        let stu = await Model.Student.findById(chooses[i]['stu_id'])
+    for (let i = 0; i < stus.length; i++) {
+        let chooses = await Model.sequelize.query('SELECT stu_id,GROUP_CONCAT(DISTINCT club_id ORDER BY step) as chosens FROM `chooses` GROUP BY stu_id WHERE stu_id = ' + stus[i].get('id'), { type: Model.sequelize.QueryTypes.SELECT})
         let temp = {
-            name: stu.get('name'),
-            class: stu.get('class'),
-            account: stu.get('account'),
+            name: stus[i].get('name'),
+            class: stus[i].get('class'),
+            account: stus[i].get('account'),
             chooses: chooses[i]['chosens'].split(','),
             result: null
         }
-        if (stu.get('class').search('綜高') !== -1) {
+        if (stus[i].get('class').search('綜高') !== -1) {
             com.push(temp)
         } else {
             other.push(temp)
