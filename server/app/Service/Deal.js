@@ -6,7 +6,7 @@ let fs = require('fs')
 async function run() {
     let clubs = await Model.Clubs.all()
     
-    let chooses = await Model.sequelize.query('SELECT stu_id,GROUP_CONCAT(DISTINCT club_id ORDER BY step) as chosens FROM `chooses` GROUP BY stu_id', { type: sequelize.QueryTypes.SELECT})
+    let chooses = await Model.sequelize.query('SELECT stu_id,GROUP_CONCAT(DISTINCT club_id ORDER BY step) as chosens FROM `chooses` GROUP BY stu_id', { type: Model.sequelize.QueryTypes.SELECT})
     
     let students = []
     let other = []
@@ -40,9 +40,13 @@ async function run() {
         }
         clubList.push(club)
     }
+
+    console.log('struct finish!')
     
     com = _.shuffle(com)
     other = _.shuffle(other)
+
+    console.log('random')
     
     for (let k = 0; k < 15; k++) {
         for (let i = 0; i < com.length; i++) {
@@ -69,6 +73,8 @@ async function run() {
             }
         }
     }
+
+    console.log('deal finish!')
     
     
     let text = ''
@@ -78,6 +84,7 @@ async function run() {
     }
     
     fs.writeFileSync('result.csv', text)
+    console.log('write result finish!')
 }
 
 run()
