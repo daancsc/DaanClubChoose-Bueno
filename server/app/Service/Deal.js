@@ -75,6 +75,7 @@ async function run() {
         for (let i = 0; i < other.length; i++) {
             for (let j = 0; j < clubList.length; j++) {
                 if (clubList[j].id == parseInt(other[i].chooses[k])) {
+                    console.log((clubList[j].max - clubList[j].students.length))
                     if ((clubList[j].max - clubList[j].students.length) > 0) {
                         other[i].result = clubList[j].name
                         clubList[j].students.push(other[i])
