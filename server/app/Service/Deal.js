@@ -13,15 +13,15 @@ async function run() {
     let com = []
     // let finish = []
 
-    console.log(chooses)
+    // console.log(chooses)
     
     for (let i = 0; i < chooses.length; i++) {
-        let stu = await Model.Student.findById(chooses[i].get('stu_id'))
+        let stu = await Model.Student.findById(chooses[i]['stu_id'])
         let temp = {
             name: stu.get('name'),
             class: stu.get('class'),
             account: stu.get('account'),
-            chooses: chooses[i].get('chosens').split(','),
+            chooses: chooses[i]['chosens'].split(','),
             result: null
         }
         if (stu.get('class').search('綜高') !== -1) {
