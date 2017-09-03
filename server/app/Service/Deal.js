@@ -127,6 +127,8 @@ async function run() {
         text += '\n'
     }
 
+    fs.writeFileSync('clubs.csv', text)
+
     console.log('write result finish!')
     return
 }
