@@ -23,6 +23,7 @@ async function run() {
             account: stus[i].get('account'),
             result: null
         }
+        console.log(chooses)
         if (chooses.length > 0) {
             temp.chooses = chooses[i]['chosens'].split(',')
         } else {
