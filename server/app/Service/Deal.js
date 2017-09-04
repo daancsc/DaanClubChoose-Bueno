@@ -63,7 +63,7 @@ async function run() {
             for (let j = 0; j < clubList.length; j++) {
                 if (com[i].result === null) {
                     if (clubList[j].id == parseInt(com[i].chooses[k])) {
-                        if (clubList[j].students.length < 6) {
+                        if (clubList[j].students.length <= 6) {
                             com[i].result = clubList[j].name
                             clubList[j].students.push(com[i])
                         }
