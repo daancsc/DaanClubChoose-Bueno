@@ -46,7 +46,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      disabled: true,
+      disabled: false,
       dialog: false,
       finishNet: false,
       account: '',
@@ -111,4 +111,3 @@ a {
   min-height: 2px;
 }
 </style>
-
