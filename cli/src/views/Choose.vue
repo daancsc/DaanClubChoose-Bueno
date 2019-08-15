@@ -70,24 +70,25 @@ export default {
           selected: -1
         })
       })
-      self.init()
+      api.getStatus(window.localStorage.getItem('token')).then(function (res) {
+        if (res.data.choose.length!=0) {
+          self.alreadyChosen = res.data.choose
+          let index = 0
+          self.alreadyChosen.forEach(i=>{
+            self.avaiableChoose[i.id-1].selected = index
+            index++
+          })
+        } else {
+          self.init()
+        }
+        self.$emit('login', res.data.name)
+      }).catch(function (error) {
+        window.console.log(error)
+        self.$router.replace('/')
+      })
     }).catch(function (error) {
       window.console.log(error)
       alert('發生錯誤')
-      self.$router.replace('/')
-    })
-    api.getStatus(window.localStorage.getItem('token')).then(function (res) {
-      if (res.data.choose.length!=0) {
-        self.alreadyChosen = res.data.choose
-        let index = 0
-        self.alreadyChosen.forEach(i=>{
-          self.avaiableChoose[i.id-1].selected = index
-          index++
-        })
-      }
-      self.$emit('login', res.data.name)
-    }).catch(function (error) {
-      window.console.log(error)
       self.$router.replace('/')
     })
   },
