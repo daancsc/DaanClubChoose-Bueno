@@ -1,33 +1,43 @@
 <template>
   <v-container>
     <v-layout
-      text-center
-      wrap
       justify-center
+      wrap
     >
-      <v-flex xs12 md6>
-
+      <v-flex xs12 sm12 md4 class="pa-2">
+          <v-card>
+          <v-card-title>{{stu.class}} {{stu.name}}</v-card-title>
+          <v-card-text><br>
+            課程總覽<br><br>
+            師大附中跨校選修<br>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text @click="logout">登出</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm12 md8 class="pa-2">
         <v-card>
           <v-card-title>選擇志願</v-card-title>
           <v-card-text>
             <v-alert
               border="bottom"
               colored-border
-              type="warning"
+              :type="status.type"
               elevation="2"
-              v-if="noFullError"
+              v-if="status.show"
             >
-              必須填滿 {{maxChoose}} 個志願！
+              {{status.msg}}
             </v-alert>
             <div v-for="(item, index) in alreadyChosen" :key="index" @click="openSelectDialog(index)">
               <v-overflow-btn
                 :items="[]"
-                :label="`第 ${index+1} 志願 ${alreadyChosen[index].name}`"
+                :label="`第 ${index+1} 志願 - ${alreadyChosen[index].name}`"
                 readonly
                 target="#dropdown-example-1"
               ></v-overflow-btn>
             </div>
-            <v-btn class="mr-4" @click="submit">儲存志願</v-btn>
+            <v-btn class="mr-4" @click="submit" color="primary">儲存志願</v-btn>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -63,10 +73,19 @@ export default {
     alreadyChosen: [],
     avaiableChoose: [],
     allChoose: [],
-    noFullError: false,
     dialog: false,
     tempSelect: 0,
-    nowSelect: 0
+    nowSelect: 0,
+    noFullError: false,
+    status: {
+      msg: '',
+      type: '',
+      show: false
+    },
+    stu: {
+      name: '',
+      class: ''
+    }
   }),
   beforeMount() {
     let self = this
@@ -82,6 +101,10 @@ export default {
       })
       api.getStatus(window.localStorage.getItem('token')).then(function (res) {
         let stuClass = res.data.class[0]+res.data.class[1]
+        self.stu = {
+          name: res.data.name,
+          class: res.data.class
+        }
         if (res.data.choose.length!=0) {
           self.alreadyChosen = res.data.choose
           let index = 0
@@ -100,18 +123,19 @@ export default {
         self.$emit('login', res.data.name)
       }).catch(function (error) {
         window.console.log(error)
+        self.showMsg('error', `發生錯誤`)
         self.$router.replace('/')
       })
     }).catch(function (error) {
       window.console.log(error)
-      alert('發生錯誤')
+      self.showMsg('error', `發生錯誤`)
       self.$router.replace('/')
     })
   },
   methods: {
     init: function () {
       for (let i = 0; i < this.maxChoose; i++) {
-        this.alreadyChosen.push({id: -1, name: ''})
+        this.alreadyChosen.push({id: -1, name: '未選擇'})
       }
     },
     openSelectDialog: function (index) {
@@ -134,15 +158,22 @@ export default {
           i.selected = -1
         }
       })
-      window.console.log(this.alreadyChosen)
+    },
+    showMsg: function (type, msg) {
+      this.status = {
+        type: type,
+        msg: msg,
+        show: true
+      }
+      this.$vuetify.goTo(0, 'easeInOutCubic')
     },
     submit: function () {
       let self = this
       self.noFullError = false
       this.alreadyChosen.forEach(i=>{
         if (i.id==-1) {
-          self.$vuetify.goTo(0, 'easeInOutCubic')
           self.noFullError = true
+          self.showMsg('warning', `需要填滿 ${self.maxChoose} 個志願！`)
           return
         }
       })
@@ -150,8 +181,17 @@ export default {
         return
       }
       api.setChoose(window.localStorage.getItem('token'), self.alreadyChosen).then(function (res) {
-        alert('儲存成功')
+        if (res.data.status) {
+          self.showMsg('success', `儲存成功！`)
+        } else {
+          self.showMsg('error', `發生錯誤`)
+        }
       })
+    },
+    logout: function () {
+      window.localStorage.removeItem('token')
+      this.$router.replace('/')
+      this.name = ''
     }
   }
 }

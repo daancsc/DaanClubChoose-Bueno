@@ -22,9 +22,10 @@
               <v-text-field
                 v-model="password"
                 label="身份證字號後四碼"
+                type="password"
                 required
               ></v-text-field>
-              <v-btn class="mr-4" @click="submit">登入</v-btn>
+              <v-btn class="mr-4" @click="submit" color="primary">登入</v-btn>
             </form>
           </v-card-text>
         </v-card>

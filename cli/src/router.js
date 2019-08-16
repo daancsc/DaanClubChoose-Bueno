@@ -16,11 +16,6 @@ export default new Router({
       path: '/choose',
       name: 'choose',
       component: Choose
-    },
-    {
-      path: '/result',
-      name: 'choose',
-      component: Choose
-    },
+    }
   ]
 })

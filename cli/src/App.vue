@@ -5,8 +5,8 @@
         <b>大安高工綜合活動選課系統</b>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text color="white">
-        <span class="mr-2" @click="logout">{{name}}</span>
+      <v-btn text color="white" v-if="false&&name!=''">
+        <span class="mr-2">{{name}}</span>
       </v-btn>
     </v-app-bar>
 
@@ -26,12 +26,7 @@ export default {
   }),
   methods: {
     display: function (name) {
-      this.name = `你好 ${name} 登出`
-    },
-    logout: function () {
-      window.localStorage.removeItem('token')
-      this.$router.replace('/')
-      this.name = ''
+      this.name = `你好 ${name}`
     }
   }
 }
