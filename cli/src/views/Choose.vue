@@ -116,8 +116,12 @@ export default {
           self.init()
         }
         self.avaiableChoose.forEach(i=>{
-          if (i.reject==stuClass) {
-            i.selected = 100
+          if (i.reject!=null) {
+            i.reject.split(',').forEach(j=>{
+              if (j==stuClass) {
+                i.selected = 100
+              }
+            })
           }
         })
         self.$emit('login', res.data.name)
