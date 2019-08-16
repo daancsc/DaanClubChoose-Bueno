@@ -1,0 +1,14 @@
+{
+      "apps" : [{
+        "name"        : "DaanClubChoose",
+        "script"      : "bin/www",
+        "watch"       : "./",
+	"exec_mode"  : "cluster",
+        "log_date_format"  : "YYYY-MM-DD HH:mm Z",
+	"env":{
+		"NODE_ENV": "production",
+		"PORT": "8181"
+	}
+      }]
+}
+
