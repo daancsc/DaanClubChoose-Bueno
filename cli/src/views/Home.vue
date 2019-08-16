@@ -51,9 +51,7 @@ export default {
         }
         api.getStatus(window.localStorage.getItem('token')).then(function (res) {
           self.$emit('login', res.data.name)
-          if (res.data.choose.length > 0) {
-            self.$router.replace('choose')
-          }
+          self.$router.replace('choose')
         }).catch(function (error) {
           self.errorMsg = "學號或身份證字號後四碼錯誤"
           self.isError = true

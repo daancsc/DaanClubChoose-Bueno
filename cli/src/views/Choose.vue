@@ -10,13 +10,21 @@
         <v-card>
           <v-card-title>選擇志願</v-card-title>
           <v-card-text>
-            <div v-for="(item, index) in alreadyChosen" :key="index">
+            <v-alert
+              border="bottom"
+              colored-border
+              type="warning"
+              elevation="2"
+              v-if="noFullError"
+            >
+              必須填滿 {{maxChoose}} 個志願！
+            </v-alert>
+            <div v-for="(item, index) in alreadyChosen" :key="index" @click="openSelectDialog(index)">
               <v-overflow-btn
                 :items="[]"
                 :label="`第 ${index+1} 志願 ${alreadyChosen[index].name}`"
                 readonly
                 target="#dropdown-example-1"
-                @click="openSelectDialog(index)"
               ></v-overflow-btn>
             </div>
             <v-btn class="mr-4" @click="submit">儲存志願</v-btn>
@@ -55,6 +63,7 @@ export default {
     alreadyChosen: [],
     avaiableChoose: [],
     allChoose: [],
+    noFullError: false,
     dialog: false,
     tempSelect: 0,
     nowSelect: 0
@@ -67,10 +76,12 @@ export default {
         self.avaiableChoose.push({
           name: i.name,
           id: i.id,
+          reject: i.reject,
           selected: -1
         })
       })
       api.getStatus(window.localStorage.getItem('token')).then(function (res) {
+        let stuClass = res.data.class[0]+res.data.class[1]
         if (res.data.choose.length!=0) {
           self.alreadyChosen = res.data.choose
           let index = 0
@@ -81,6 +92,11 @@ export default {
         } else {
           self.init()
         }
+        self.avaiableChoose.forEach(i=>{
+          if (i.reject==stuClass) {
+            i.selected = 100
+          }
+        })
         self.$emit('login', res.data.name)
       }).catch(function (error) {
         window.console.log(error)
@@ -122,6 +138,17 @@ export default {
     },
     submit: function () {
       let self = this
+      self.noFullError = false
+      this.alreadyChosen.forEach(i=>{
+        if (i.id==-1) {
+          self.$vuetify.goTo(0, 'easeInOutCubic')
+          self.noFullError = true
+          return
+        }
+      })
+      if (self.noFullError) {
+        return
+      }
       api.setChoose(window.localStorage.getItem('token'), self.alreadyChosen).then(function (res) {
         alert('儲存成功')
       })
