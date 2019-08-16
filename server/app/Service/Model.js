@@ -20,7 +20,7 @@ const Clubs = sequelize.define('club', {
     id:{ type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
     name: {type: Sequelize.STRING},
     max: {type: Sequelize.INTEGER},
-    temp: {type: Sequelize.STRING}
+    reject: {type: Sequelize.STRING}
 })
 
 const Choose = sequelize.define('choose', {
