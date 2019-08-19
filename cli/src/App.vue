@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app class="orange accent-3" style="color: white">
       <v-toolbar-title class="headline text-uppercase">
-        <b>大安高工綜合活動選課系統</b>
+        <b>大安高工彈性學習選課系統</b>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text color="white" v-if="false&&name!=''">

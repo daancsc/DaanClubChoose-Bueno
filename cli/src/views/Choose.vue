@@ -8,7 +8,8 @@
         <v-card>
           <v-card-title>{{stu.class}} {{stu.name}}</v-card-title>
           <v-card-text><br>
-            詳細資訊及課程總覽請參閱新生手冊<br>
+            <a href="/choosev3/allClass.pdf">課程總覽</a><br>
+            系統開放時間： 8/23(五) 09:00 ~ 8/27(二) 17:00 <br>
           </v-card-text>
           <v-card-actions>
             <v-btn text @click="logout">登出</v-btn>
@@ -43,10 +44,10 @@
                 :label="`第 ${index+1} 志願 - ${alreadyChosen[index].name}`"
                 readonly
                 target="#dropdown-example-1"
-                :disabled="result.name!=''"
+                :disabled="disableSystem"
               ></v-overflow-btn>
             </div>
-            <v-btn class="mr-4" @click="submit" color="primary" :disabled="result.name!=''">儲存志願</v-btn>
+            <v-btn class="mr-4" @click="submit" color="primary" :disabled="disableSystem">儲存志願</v-btn>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -94,6 +95,7 @@ export default {
     tempSelect: 0,
     nowSelect: 0,
     noFullError: false,
+    disableSystem: false,
     status: {
       msg: '',
       type: '',
@@ -112,6 +114,14 @@ export default {
   }),
   beforeMount() {
     let self = this
+    let today = new Date();
+    let d = today.getDate()
+    let h = today.getHours()
+    let m = today.getMonth() + 1
+    let yyyy = today.getFullYear()
+    if (yyyy>=2019&&m>=8&&d>=27&&h>=17) {
+      self.disableSystem = true
+    }
     api.getClubs(window.localStorage.getItem('token')).then((res) => {
       self.allChoose = res.data
       res.data.forEach(i=>{
@@ -152,12 +162,15 @@ export default {
           }
         })
         self.$emit('login', res.data.name)
-      }).catch(function (error) {
+        if (self.result.name == '') {
+          self.disabled = true
+        }
+      }).catch((error) => {
         window.console.log(error)
         self.showMsg('error', `發生錯誤`)
         self.$router.replace('/')
       })
-    }).catch(function (error) {
+    }).catch((error) => {
       window.console.log(error)
       self.showMsg('error', `發生錯誤`)
       self.$router.replace('/')
@@ -170,7 +183,6 @@ export default {
       }
     },
     setResult: function (id) {
-
       api.getClubInfo(id ,window.localStorage.getItem('token')).then((res) => {
         this.result = res.data
         this.result.others = this.result.others!='' ? this.result.others : '無'
@@ -179,7 +191,7 @@ export default {
     openSelectDialog: function (index) {
       this.tempSelect=this.alreadyChosen[index].id
       this.nowSelect=index
-      this.dialog=true && (this.result.name=='') //if has result then disabled button
+      this.dialog=true && !self.disableSystem //if has result then disabled button
     },
     saveChoose: function (index, id) {
       if (id==-1) {
