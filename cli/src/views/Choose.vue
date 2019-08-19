@@ -8,8 +8,7 @@
           <v-card>
           <v-card-title>{{stu.class}} {{stu.name}}</v-card-title>
           <v-card-text><br>
-            課程總覽<br><br>
-            師大附中跨校選修<br>
+            詳細資訊及課程總覽請參閱新生手冊<br>
           </v-card-text>
           <v-card-actions>
             <v-btn text @click="logout">登出</v-btn>
