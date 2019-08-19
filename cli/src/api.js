@@ -17,6 +17,9 @@ export default {
   getClubs: function (token) {
     return client.get('/clubs', { headers: {'Authorization': token} })
   },
+  getClubInfo: function (id, token) {
+    return client.get(`/club/${id}`, { headers: {'Authorization': token} })
+  },
   setChoose: function (token, choose) {
     return client.post('/choose', choose, { headers: {'Authorization': token} })
   }

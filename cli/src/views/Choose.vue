@@ -5,7 +5,7 @@
       wrap
     >
       <v-flex xs12 sm12 md4 class="pa-2">
-          <v-card>
+        <v-card>
           <v-card-title>{{stu.class}} {{stu.name}}</v-card-title>
           <v-card-text><br>
             詳細資訊及課程總覽請參閱新生手冊<br>
@@ -13,6 +13,15 @@
           <v-card-actions>
             <v-btn text @click="logout">登出</v-btn>
           </v-card-actions>
+        </v-card>
+        <br>
+        <v-card v-if="result.name!=''">
+          <v-card-title class="title">選修課程結果： {{result.name}}</v-card-title>
+          <v-card-text>
+            老師： {{result.teacher}}<br>
+            地點： {{result.location}}<br>
+            備註： {{result.others}}<br>
+          </v-card-text>
         </v-card>
       </v-flex>
       <v-flex xs12 sm12 md8 class="pa-2">
@@ -34,9 +43,10 @@
                 :label="`第 ${index+1} 志願 - ${alreadyChosen[index].name}`"
                 readonly
                 target="#dropdown-example-1"
+                :disabled="result.name!=''"
               ></v-overflow-btn>
             </div>
-            <v-btn class="mr-4" @click="submit" color="primary">儲存志願</v-btn>
+            <v-btn class="mr-4" @click="submit" color="primary" :disabled="result.name!=''">儲存志願</v-btn>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -92,11 +102,17 @@ export default {
     stu: {
       name: '',
       class: ''
+    },
+    result: {
+      name: '',
+      teacher: '',
+      location: '',
+      others: ''
     }
   }),
   beforeMount() {
     let self = this
-    api.getClubs(window.localStorage.getItem('token')).then(function (res) {
+    api.getClubs(window.localStorage.getItem('token')).then((res) => {
       self.allChoose = res.data
       res.data.forEach(i=>{
         self.avaiableChoose.push({
@@ -106,11 +122,15 @@ export default {
           selected: -1
         })
       })
-      api.getStatus(window.localStorage.getItem('token')).then(function (res) {
+      api.getStatus(window.localStorage.getItem('token')).then((res) => {
         let stuClass = res.data.class[0]+res.data.class[1]
         self.stu = {
           name: res.data.name,
           class: res.data.class
+        }
+        let result = res.data.result
+        if (result) {
+          self.setResult(res.data.result)
         }
         if (res.data.choose.length!=0) {
           self.alreadyChosen = res.data.choose
@@ -149,10 +169,17 @@ export default {
         this.alreadyChosen.push({id: -1, name: '未選擇'})
       }
     },
+    setResult: function (id) {
+
+      api.getClubInfo(id ,window.localStorage.getItem('token')).then((res) => {
+        this.result = res.data
+        this.result.others = this.result.others!='' ? this.result.others : '無'
+      })
+    },
     openSelectDialog: function (index) {
       this.tempSelect=this.alreadyChosen[index].id
       this.nowSelect=index
-      this.dialog=true
+      this.dialog=true && (this.result.name=='') //if has result then disabled button
     },
     saveChoose: function (index, id) {
       if (id==-1) {
@@ -197,7 +224,7 @@ export default {
       if (self.noFullError) {
         return
       }
-      api.setChoose(window.localStorage.getItem('token'), self.alreadyChosen).then(function (res) {
+      api.setChoose(window.localStorage.getItem('token'), self.alreadyChosen).then((res) => {
         if (res.data.status) {
           self.showMsg('success', `儲存成功！`)
         } else {
