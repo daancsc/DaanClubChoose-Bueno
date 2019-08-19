@@ -165,12 +165,13 @@ export default {
         this.alreadyChosen[index].id = id
         this.alreadyChosen[index].name = this.allChoose[id-1].name
         this.avaiableChoose[id-1].selected = index
-        this.avaiableChoose.forEach(i=>{
-          if (i.selected==index&&i.id!=id) {
-            i.selected = -1
-          }
-        })
       }
+      //clean old choose
+      this.avaiableChoose.forEach(i=>{
+        if (i.selected==index&&i.id!=id) {
+          i.selected = -1
+        }
+      })
 
       this.tempSelect = null
       this.nowSelect = 0
