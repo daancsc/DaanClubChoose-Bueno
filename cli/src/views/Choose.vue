@@ -8,7 +8,7 @@
         <v-card>
           <v-card-title>{{stu.class}} {{stu.name}}</v-card-title>
           <v-card-text><br>
-            <a href="/choosev3/allClass.pdf">課程總覽</a><br>
+            <a target="_blank" rel="noopener noreferrer" href="/choosev3/allClass.pdf">課程總覽</a><br>
             系統開放時間： 8/23(五) 09:00 ~ 8/27(二) 17:00 <br>
           </v-card-text>
           <v-card-actions>
