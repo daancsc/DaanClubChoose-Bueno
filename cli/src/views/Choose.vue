@@ -48,15 +48,23 @@
           </v-card-title>
           <v-card-text>
             <v-radio-group v-model="tempSelect" @change="saveChoose(nowSelect, tempSelect)">
-            <div v-for="(item, index) in avaiableChoose" :key="index">
-              <v-radio
-                :label="item.name"
-                color="orange darken-3"
-                :value="item.id"
-                :disabled="item.selected!=-1&&item.selected!=nowSelect"
-              ></v-radio>
-              <br>
-            </div>
+              <div class="">
+                <v-radio
+                  label="未選擇"
+                  color="orange darken-3"
+                  value="-1"
+                ></v-radio>
+                <br>
+              </div>
+              <div v-for="(item, index) in avaiableChoose" :key="index">
+                <v-radio
+                  :label="item.name"
+                  color="orange darken-3"
+                  :value="item.id"
+                  :disabled="item.selected!=-1&&item.selected!=nowSelect"
+                ></v-radio>
+                <br>
+              </div>
             </v-radio-group>
           </v-card-text>
         </v-card>
@@ -148,20 +156,25 @@ export default {
       this.dialog=true
     },
     saveChoose: function (index, id) {
-      //put choose in alreadyChosen
-      this.alreadyChosen[index].id = id
-      this.alreadyChosen[index].name = this.allChoose[id-1].name
+      if (id==-1) {
+        //no choose
+        this.alreadyChosen[index].id = -1
+        this.alreadyChosen[index].name = '未選擇'
+      } else {
+        //put choose in alreadyChosen
+        this.alreadyChosen[index].id = id
+        this.alreadyChosen[index].name = this.allChoose[id-1].name
+        this.avaiableChoose[id-1].selected = index
+        this.avaiableChoose.forEach(i=>{
+          if (i.selected==index&&i.id!=id) {
+            i.selected = -1
+          }
+        })
+      }
 
       this.tempSelect = null
       this.nowSelect = 0
       this.dialog = false
-
-      this.avaiableChoose[id-1].selected = index
-      this.avaiableChoose.forEach(i=>{
-        if (i.selected==index&&i.id!=id) {
-          i.selected = -1
-        }
-      })
     },
     showMsg: function (type, msg) {
       this.status = {
