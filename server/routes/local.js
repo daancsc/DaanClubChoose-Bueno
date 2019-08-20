@@ -39,6 +39,15 @@ router.get('/clubs', (req, res, next) => {
     })
 })
 
+router.get('/club/:id', (req, res, next) => {
+    User.getClubInfo(req.params.id, req.get("Authorization")).then((result) => {
+        res.status(200).json(result)
+    }).catch((error) => {
+        console.log(error)
+        res.status(500).json({status:false})
+    })
+})
+
 // /* GET users listing. */
 // router.get('/:token', function (req, res, next) {
 //     share.getCourses(req.params.token).then((result) => {

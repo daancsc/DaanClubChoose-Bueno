@@ -34,6 +34,7 @@ let getStatus = (token) => {
     }).then(student => {
       result.name = student.get('name')
       result.class = student.get('class')
+      result.result = student.get('result')
       return Model.Choose.findAll({ where: {stu_id: student.id}, order:[['step','ASC']] })
     }).then(chooses => {
       Model.Clubs.findAll().then((clubs) => {
@@ -54,6 +55,27 @@ let getStatus = (token) => {
       }).catch((error) => {
         reject(error)
       })
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+let getClubInfo = (id, token) => {
+  return new Promise((resolve, reject) => {
+    var result = {}
+    redis.get(token).then((value) => {
+      return Model.Student.findOne({ where: { account: value} })
+    }).then(student => {
+      return Model.Clubs.findOne({ where: {id: id}})
+    }).then(club => {
+	result = {
+	    name: club.get('name'),
+	    teacher: club.get('teacher'),
+            location: club.get('classroom'),
+            others: club.get('others')
+        }
+      resolve(result)
     }).catch((error) => {
       reject(error)
     })
@@ -95,5 +117,6 @@ module.exports = {
   login: login,
   getStatus: getStatus,
   setChoose: setChoose,
-  getClubs: getClubs
+  getClubs: getClubs,
+  getClubInfo: getClubInfo
 }

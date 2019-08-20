@@ -4,7 +4,13 @@ var config = require('../../config/database.json')
 const sequelize = new Sequelize(config.database, config.username, config.password , {
     host: config.host,
     dialect: 'mysql',
-    logging: false
+    logging: false,
+    pool: {
+        max:100,
+        min:0,
+        idle:200000,
+        acquire: 1000000
+    }
 })
 
 const Student = sequelize.define('student', {
@@ -13,13 +19,17 @@ const Student = sequelize.define('student', {
     password: {type: Sequelize.STRING},
     name: {type: Sequelize.STRING},
     class: {type: Sequelize.STRING},
-    chosen: {type: Sequelize.INTEGER}
+    setNum: {type: Sequelize.INTEGER},
+    result: {type: Sequelize.INTEGER}
 })
 
 const Clubs = sequelize.define('club', {
     id:{ type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
     name: {type: Sequelize.STRING},
     max: {type: Sequelize.INTEGER},
+    teacher: {type: Sequelize.STRING},
+    classroom: {type: Sequelize.STRING},
+    others: {type: Sequelize.STRING},
     reject: {type: Sequelize.STRING}
 })
 
