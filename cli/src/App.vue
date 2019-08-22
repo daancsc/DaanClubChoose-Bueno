@@ -14,20 +14,6 @@
       <br>
       <router-view @login="display"></router-view>
     </v-content>
-    <br>
-    <br>
-    <v-footer class="orange lighten-1 text-center pa-0 ma-0">
-      <v-card
-        flat
-        tile
-        width="100vw"
-        class="orange lighten-1 text-center"
-      >
-        <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} - <a target="_blank" rel="noopener noreferrer" href="https://dacsc.club" class="white--text"><strong>DAAN Computer Study Club</strong></a>
-        </v-card-text>
-      </v-card>
-    </v-footer>
   </v-app>
 </template>
 
