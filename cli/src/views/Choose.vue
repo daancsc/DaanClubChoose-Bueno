@@ -154,7 +154,7 @@ export default {
         }
         let result = res.data.result
         if (result) {
-          self.setResult(res.data.result)
+          //self.setResult(res.data.result)
         }
         if (res.data.choose.length!=0) {
           self.alreadyChosen = res.data.choose
@@ -201,11 +201,15 @@ export default {
         this.result = res.data
         this.result.others = this.result.others!='' ? this.result.others : '無'
       })
+      this.disableSystem = true
     },
     openSelectDialog: function (index) {
       this.tempSelect=this.alreadyChosen[index].id
       this.nowSelect=index
-      this.dialog=true && !self.disableSystem //if has result then disabled button
+      //if has result then disabled button
+      if (!self.disableSystem) {
+        this.dialog=true
+      }
     },
     saveChoose: function (index, id) {
       if (id==-1) {
