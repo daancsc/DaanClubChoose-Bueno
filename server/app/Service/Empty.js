@@ -21,11 +21,10 @@ async function run() {
 	}
     }
     console.log('write data in CSV!')
-    let text = ''
+    let text = '\ufeff'
     
     for (let i = 0; i < students.length; i++) {
-        text += students[i].account + ',' + students[i].class + ',' + students[i].name + '\n'
-        text += '\n'
+        text += `"${students[i].account}","${students[i].class}","${students[i].name}"` + '\n'
     }
     
     fs.writeFileSync('empty.csv', text)

@@ -53,6 +53,7 @@ async function run() {
     }
     
     let clubList = []
+    let people = 0
     for (let i = 0; i < clubs.length; i++) {
         let club = {
             id: clubs[i].get('id'),
@@ -61,8 +62,10 @@ async function run() {
             max: clubs[i].get('max'),
             students: []
         }
+	people += club.max
         clubList.push(club)
     }
+    console.log(people)
     for (let n = 0;n < 15; n++) {   
         clubList.forEach(i=>{
             let arr = _.filter(students, j=>{
@@ -137,53 +140,50 @@ async function run() {
         if (i.step=='random') {
 	    i.step = '隨機'
 	}
-	Model.Student.update({result: result}, {where: {account: account}})
+//	Model.Student.update({result: result}, {where: {account: account}})
     })
     
 
     console.log('write data in CSV!')
-    let text = ''
+    let text = '\ufeff'
     
     for (let i = 0; i < students.length; i++) {
-        text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' 
-        if (students[i].result != null)
-            text += students[i].result
-        text += ',填寫' + students[i].choosesLen + '志願'
-	text += ',第' + students[i].step + '志願'
+        text += `"${students[i].account}","${students[i].class}","${students[i].name}","${students[i].result}"` 
+        text += `,"填寫${students[i].choosesLen}志願"`
+	text += `,"第${students[i].step}志願"`
         text += '\n'
     }
     
-    fs.writeFileSync('result.csv', text)
+    fs.writeFileSync('result.csv', text, {encoding: 'utf8'})
 
-    text = ''
+    text = '\ufeff'
     for (let i = 0; i < students.length; i++) {
-        text += students[i].account + ',' + students[i].class + ',' + students[i].name + ',' 
-        if (students[i].choosesLen > 0)
+        text += `"${students[i].account}","${students[i].class}","${students[i].name}"` 
+        if (students[i].choosesLen > 0) {
             for (let j = 0; j < students[i].choosesLen; j++) {
                 let temp = await Model.Clubs.findById(students[i].Constantchooses[j])
-                text += temp.get('name') + ','
+                text += `,"${temp.get('name')}"`
             }
-                
+	}
         text += '\n'
     }
 
-    fs.writeFileSync('choose.csv', text)
+    fs.writeFileSync('choose.csv', text, {encoding: 'utf8'})
 
-    text = ''
+    text = '\ufeff'
     for (let i = 0; i < clubList.length; i++) {
         text += clubList[i].name + '\n'
         for (let j = 0; j < clubList[i].students.length; j++) {
-            text += clubList[i].students[j].account + ',' + clubList[i].students[j].class + ',' + clubList[i].students[j].name + ',' 
-            if (clubList[i].students[j].result != '0')
-                text += clubList[i].students[j].result
-            text += ',填寫' + clubList[i].students[j].choosesLen + '志願'
-	    text += ',第' + clubList[i].students[j].step + '志願'
+            text += `"${clubList[i].students[j].account}","${clubList[i].students[j].class}","${clubList[i].students[j].name}",` 
+            text += `"${clubList[i].students[j].result}"`
+            text += `,"填寫${clubList[i].students[j].choosesLen}志願"`
+	    text += `,"第${clubList[i].students[j].step}志願"`
             text += '\n'
         }   
         text += '\n'
     }
 
-    fs.writeFileSync('clubs.csv', text)
+    fs.writeFileSync('clubs.csv', text, {encoding: 'utf8'})
 
     console.log('write result finish!')
     
