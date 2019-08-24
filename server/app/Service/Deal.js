@@ -38,7 +38,8 @@ async function run() {
             class: stus[i].get('class').trim(),
             account: stus[i].get('account').trim(),
             choosesLen: 0,
-	    result: '0'
+	    result: '0',
+	    step: 0
         }
         if (chooses.length > 0) {
             temp.Constantchooses = chooses[0]['chosens'].split(',')
@@ -62,66 +63,83 @@ async function run() {
         }
         clubList.push(club)
     }
-    
-	for (let k = 0;k<15;k++) {
-    clubList.forEach(i=>{
-        students = _.shuffle(students)
+    for (let n = 0;n < 15; n++) {   
+        clubList.forEach(i=>{
+            let arr = _.filter(students, j=>{
+	        return (j.result=='0'&&j.chooses.length!=0&&j.chooses[0]==i.id)
+ 	    })
+	    arr = _.shuffle(arr)
+     	    arr.forEach(j=>{
+	        if (i.max>0) {
+	            students.forEach(k=>{
+		        if (k.account==j.account) {
+		            k.step++
+		            k.result = i.name
+		        }
+		    })
+	            i.students.push(j)
+		    i.max--
+	        } else {
+	            students.forEach(k=>{
+		        if (k.account == j.account) {
+		            k.step++
+		            k.chooses.shift()
+		        }
+		    })
+	        }
+	    })
+        })
+    }
+    /*
+    for (let k = 0;k<15;k++) {
+        clubList.forEach(i=>{
+            students = _.shuffle(students)
             students.forEach(j=>{
-	        if (j.chooses.length>0 && j.result=='0'){
+	        if (j.chooses.length && j.choosesLen && j.result=='0'){
 		    if (i.id==j.chooses[k]) {
-			j.chooses.shift()
 		        if (i.max>0) {
                             j.result = i.name
+			    j.step = k+1
 		            i.students.push(j)
+	                    i.max--
 		        }
-	                i.max--
 	            }
 	        }
 	    })
-    })
-	}
-    students = _.shuffle(students)
+        })
+    }
+    */
     console.log('random')
     clubList.forEach(i=>{
 	for (let k = 0;k<15;k++) {
-            students = _.shuffle(students)
             students.forEach(j=>{
 	        if (j.result=='0'){
 		    if (!isReject(j, i.reject)) {
 		        if (i.max>0) {
                             j.result = i.name
+			    j.step = 'random'
 		            i.students.push(j)
+	                    i.max--
 		        }
-	                i.max--
 	            }
 	        }
 	    })
 	}
     })
-    /*
-    for (let k = 0; k < 15; k++) {
-        for (let i = 0; i < students.length; i++) {
-            for (let j = 0; j < clubList.length; j++) {
-                if (students[i].result === null) {
-                    if (clubList[j].id == parseInt(students[i].chooses[k])) {
-                        if (clubList[j].students.length <= 6) {
-                            students[i].result = clubList[j].name
-			    clubList[j].students.push(students[i])
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
+    
     console.log('deal finish!')
     console.log('write data in DB!')
 
+    
     students.forEach(i=>{
         let account = i.account
 	let result = searchClubId(i.result, clubList)
-        Model.Student.update({result: result}, {where: {account: account}})
+        if (i.step=='random') {
+	    i.step = '隨機'
+	}
+	Model.Student.update({result: result}, {where: {account: account}})
     })
+    
 
     console.log('write data in CSV!')
     let text = ''
@@ -131,6 +149,7 @@ async function run() {
         if (students[i].result != null)
             text += students[i].result
         text += ',填寫' + students[i].choosesLen + '志願'
+	text += ',第' + students[i].step + '志願'
         text += '\n'
     }
     
@@ -155,9 +174,10 @@ async function run() {
         text += clubList[i].name + '\n'
         for (let j = 0; j < clubList[i].students.length; j++) {
             text += clubList[i].students[j].account + ',' + clubList[i].students[j].class + ',' + clubList[i].students[j].name + ',' 
-            if (clubList[i].students[j].result != null)
+            if (clubList[i].students[j].result != '0')
                 text += clubList[i].students[j].result
             text += ',填寫' + clubList[i].students[j].choosesLen + '志願'
+	    text += ',第' + clubList[i].students[j].step + '志願'
             text += '\n'
         }   
         text += '\n'
@@ -166,6 +186,7 @@ async function run() {
     fs.writeFileSync('clubs.csv', text)
 
     console.log('write result finish!')
+    
     return
 }
 
