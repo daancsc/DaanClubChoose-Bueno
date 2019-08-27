@@ -133,7 +133,8 @@ export default {
     let h = today.getHours()
     let m = today.getMonth() + 1
     let yyyy = today.getFullYear()
-    if (yyyy>=2019&&m>=8&&d>=27&&h>=17) {
+    self.disableSystem = false
+    if (yyyy>=2019&&m>=8&&d>=28&&h>=12) {
       self.disableSystem = true
     }
     api.getClubs(window.localStorage.getItem('token')).then((res) => {
@@ -207,9 +208,7 @@ export default {
       this.tempSelect=this.alreadyChosen[index].id
       this.nowSelect=index
       //if has result then disabled button
-      if (!self.disableSystem) {
-        this.dialog=true
-      }
+      this.dialog=!this.disableSystem
     },
     saveChoose: function (index, id) {
       if (id==-1) {
