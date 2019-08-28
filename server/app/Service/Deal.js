@@ -140,7 +140,7 @@ async function run() {
         if (i.step=='random') {
 	    i.step = '隨機'
 	}
-//	Model.Student.update({result: result}, {where: {account: account}})
+	Model.Student.update({result: result}, {where: {account: account}})
     })
     
 
